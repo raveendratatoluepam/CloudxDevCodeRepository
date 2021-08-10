@@ -65,14 +65,8 @@ namespace Microsoft.eShopWeb.Web.Pages.Basket
             var updateModel = items.ToDictionary(b => b.Id.ToString(), b => b.Quantity);
             await _basketService.SetQuantities(BasketModel.Id, updateModel);
             await SetBasketModelAsync();
-            try
-            {
-                await new OrderReservationService().AddOrderReserver(items.ToList());
-            }
-            catch
-            {
-                await new ServiceBusQueueService().AddItemtoQueue(JsonConvert.SerializeObject(items));
-            }
+            await new ServiceBusQueueService().AddItemtoQueue(JsonConvert.SerializeObject(items));
+
         }
 
         private async Task SetBasketModelAsync()
